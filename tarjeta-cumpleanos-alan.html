@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Feliz Cumpleaños Alan 🎂</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ===== STARS ===== */
+        .stars {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.8); }
+        }
+
+        /* ===== GIFT SCREEN ===== */
+        #gift-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            z-index: 10;
+        }
+
+        #gift-screen.hide {
+            opacity: 0;
+            transform: scale(0.4) rotate(10deg);
+            pointer-events: none;
+        }
+
+        .gift-title {
+            font-size: clamp(1.1rem, 4vw, 1.6rem);
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+            margin-bottom: 25px;
+            animation: pulse-text 2s infinite;
+            text-align: center;
+            padding: 0 20px;
+            letter-spacing: 1px;
+        }
+
+        @keyframes pulse-text {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.65; }
+        }
+
+        .gift-container {
+            position: relative;
+            cursor: pointer;
+            animation: bounce 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(255, 100, 150, 0.7));
+            transition: filter 0.2s;
+        }
+
+        .gift-container:active {
+            filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.9));
+            transform: scale(0.93);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-18px) rotate(2deg); }
+        }
+
+        .gift-svg {
+            width: min(200px, 55vw);
+            height: auto;
+        }
+
+        .open-btn {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #ff6b9d, #c44dff);
+            border: none;
+            color: white;
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            font-weight: 800;
+            padding: 16px 45px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 35px rgba(255, 107, 157, 0.5);
+            animation: pulse-btn 1.5s ease-in-out infinite;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            touch-action: manipulation;
+        }
+
+        @keyframes pulse-btn {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 107, 157, 0.5); transform: scale(1); }
+            50% { box-shadow: 0 0 60px rgba(255, 107, 157, 0.9); transform: scale(1.06); }
+        }
+
+        /* ===== BIRTHDAY SCREEN ===== */
+        #birthday-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease;
+            z-index: 5;
+            overflow: hidden;
+            padding: 20px 10px;
+        }
+
+        #birthday-screen.show {
+            display: flex;
+        }
+
+        #birthday-screen.visible {
+            opacity: 1;
+        }
+
+        .birthday-title {
+            font-size: clamp(1.4rem, 5vw, 2.2rem);
+            color: #ffd700;
+            text-align: center;
+            font-weight: 900;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.9), 0 0 60px rgba(255, 215, 0, 0.5);
+            animation: slide-down 0.8s ease both;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .birthday-name {
+            font-size: clamp(3rem, 14vw, 5.5rem);
+            background: linear-gradient(135deg, #ff6b9d, #ffd700, #c44dff, #60a5fa, #ff6b9d);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            animation: gradient-shift 3s ease infinite, slide-down 1s ease 0.2s both;
+            margin-bottom: 18px;
+            letter-spacing: 4px;
+            text-shadow: none;
+        }
+
+        @keyframes gradient-shift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes slide-down {
+            from { opacity: 0; transform: translateY(-40px) scale(0.8); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ===== CAKE ===== */
+        .cake-wrapper {
+            position: relative;
+            animation: cake-pop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
+            margin-bottom: 5px;
+        }
+
+        @keyframes cake-pop {
+            from { opacity: 0; transform: scale(0) rotate(-15deg); }
+            to   { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        .cake-svg {
+            width: min(230px, 62vw);
+            height: auto;
+            filter: drop-shadow(0 10px 30px rgba(233, 30, 140, 0.4));
+        }
+
+        /* ===== CANDLES ===== */
+        .candles-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .candle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: candle-in 0.5s ease both;
+        }
+
+        .candle:nth-child(1) { animation-delay: 0.6s; }
+        .candle:nth-child(2) { animation-delay: 0.75s; }
+        .candle:nth-child(3) { animation-delay: 0.9s; }
+        .candle:nth-child(4) { animation-delay: 1.05s; }
+        .candle:nth-child(5) { animation-delay: 1.2s; }
+
+        @keyframes candle-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .flame {
+            width: 13px;
+            height: 20px;
+            background: radial-gradient(ellipse at 40% 70%, #fff9c4, #ffb300 50%, #ff6f00);
+            border-radius: 50% 50% 25% 25% / 60% 60% 40% 40%;
+            animation: flicker 0.25s ease-in-out infinite alternate;
+            box-shadow: 0 0 8px #ffb300, 0 0 20px #ff6f00, 0 0 4px #fff9c4;
+        }
+
+        @keyframes flicker {
+            0%   { transform: scaleX(1)    scaleY(1)    rotate(-4deg); }
+            100% { transform: scaleX(0.88) scaleY(1.12) rotate(4deg); }
+        }
+
+        .candle-body {
+            width: 11px;
+            height: 38px;
+            border-radius: 3px;
+            margin-top: 2px;
+        }
+
+        .candle:nth-child(1) .candle-body { background: linear-gradient(to right, #ff6b9d, #ff8fab); }
+        .candle:nth-child(2) .candle-body { background: linear-gradient(to right, #c44dff, #a855f7); }
+        .candle:nth-child(3) .candle-body { background: linear-gradient(to right, #ffd700, #fbbf24); }
+        .candle:nth-child(4) .candle-body { background: linear-gradient(to right, #4ade80, #22c55e); }
+        .candle:nth-child(5) .candle-body { background: linear-gradient(to right, #60a5fa, #3b82f6); }
+
+        /* ===== SUBTITLE ===== */
+        .subtitle {
+            font-size: clamp(0.85rem, 3.2vw, 1.1rem);
+            color: rgba(255, 255, 255, 0.85);
+            text-align: center;
+            animation: slide-down 1s ease 1.4s both;
+            padding: 0 30px;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== CONFETTI ===== */
+        .confetti-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 20;
+            overflow: hidden;
+        }
+
+        .conf {
+            position: absolute;
+            top: -20px;
+            border-radius: 2px;
+            animation: conf-fall linear forwards;
+        }
+
+        @keyframes conf-fall {
+            0%   { transform: translateY(0)      rotate(0deg)   translateX(0);    opacity: 1; }
+            50%  { transform: translateY(50vh)   rotate(360deg) translateX(30px); opacity: 1; }
+            100% { transform: translateY(110vh)  rotate(720deg) translateX(-20px); opacity: 0.2; }
+        }
+
+        /* ===== FIREWORKS ===== */
+        .fw-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 15;
+        }
+
+        .fw-particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: fw-explode ease-out forwards;
+        }
+
+        @keyframes fw-explode {
+            0%   { transform: translate(0, 0) scale(1.2); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        /* ===== FLOATING EMOJI ===== */
+        .float-emoji {
+            position: fixed;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            animation: float-up linear forwards;
+            pointer-events: none;
+            z-index: 18;
+        }
+
+        @keyframes float-up {
+            from { transform: translateY(0) rotate(0deg) scale(1);   opacity: 1; }
+            to   { transform: translateY(-110vh) rotate(30deg) scale(0.6); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background stars -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Confetti layer -->
+    <div class="confetti-container" id="confetti"></div>
+
+    <!-- Fireworks layer -->
+    <div class="fw-container" id="fireworks"></div>
+
+    <!-- ====== SCREEN 1: Gift ====== -->
+    <div id="gift-screen">
+        <p class="gift-title">✨ Tienes un regalo especial ✨</p>
+
+        <div class="gift-container" onclick="openGift()" role="button" aria-label="Abrir regalo">
+            <svg class="gift-svg" viewBox="0 0 200 230" xmlns="http://www.w3.org/2000/svg">
+                <!-- Shadow -->
+                <ellipse cx="100" cy="222" rx="80" ry="8" fill="rgba(0,0,0,0.25)"/>
+                <!-- Box body -->
+                <rect x="18" y="108" width="164" height="108" rx="10" fill="#e91e8c"/>
+                <rect x="18" y="108" width="164" height="108" rx="10" fill="url(#box-grad)"/>
+                <!-- Ribbon vertical on body -->
+                <rect x="88" y="108" width="24" height="108" fill="url(#ribbon-grad)" rx="3"/>
+                <!-- Box lid -->
+                <rect x="8"  y="78"  width="184" height="38" rx="8" fill="#f06292"/>
+                <rect x="8"  y="78"  width="184" height="38" rx="8" fill="url(#lid-grad)"/>
+                <!-- Ribbon horizontal on lid -->
+                <rect x="8"  y="90"  width="184" height="14" fill="url(#ribbon-grad)"/>
+                <!-- Bow loops -->
+                <ellipse cx="66"  cy="62" rx="38" ry="22" fill="url(#ribbon-grad)" transform="rotate(-25 66 62)" opacity="0.95"/>
+                <ellipse cx="134" cy="62" rx="38" ry="22" fill="url(#ribbon-grad)" transform="rotate(25 134 62)"  opacity="0.95"/>
+                <!-- Bow center knot -->
+                <circle cx="100" cy="70" r="18" fill="#ffb300"/>
+                <circle cx="100" cy="70" r="11" fill="#ffd700"/>
+                <circle cx="100" cy="70" r="5"  fill="#fff9c4"/>
+                <!-- Box sparkles -->
+                <text x="30"  y="150" font-size="20" fill="rgba(255,255,255,0.55)">★</text>
+                <text x="152" y="175" font-size="16" fill="rgba(255,255,255,0.4)">★</text>
+                <text x="48"  y="198" font-size="13" fill="rgba(255,255,255,0.5)">✦</text>
+                <text x="143" y="130" font-size="18" fill="rgba(255,255,255,0.45)">★</text>
+                <text x="100" y="185" font-size="15" fill="rgba(255,255,255,0.45)" text-anchor="middle">✦</text>
+                <!-- Gradients -->
+                <defs>
+                    <linearGradient id="box-grad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%"   stop-color="#f06292" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#880e4f" stop-opacity="0.25"/>
+                    </linearGradient>
+                    <linearGradient id="lid-grad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%"   stop-color="#f8bbd0" stop-opacity="0.4"/>
+                        <stop offset="100%" stop-color="#ad1457" stop-opacity="0.2"/>
+                    </linearGradient>
+                    <linearGradient id="ribbon-grad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%"   stop-color="#ffe066"/>
+                        <stop offset="50%"  stop-color="#ffd700"/>
+                        <stop offset="100%" stop-color="#f9a825"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <button class="open-btn" onclick="openGift()">🎁 Abrir</button>
+    </div>
+
+    <!-- ====== SCREEN 2: Birthday ====== -->
+    <div id="birthday-screen">
+        <div class="birthday-title">🎉 Feliz Cumpleaños 🎉</div>
+        <div class="birthday-name">Alan</div>
+
+        <div class="cake-wrapper">
+            <!-- Candles above cake -->
+            <div class="candles-row">
+                <div class="candle"><div class="flame"></div><div class="candle-body"></div></div>
+                <div class="candle"><div class="flame"></div><div class="candle-body"></div></div>
+                <div class="candle"><div class="flame"></div><div class="candle-body"></div></div>
+                <div class="candle"><div class="flame"></div><div class="candle-body"></div></div>
+                <div class="candle"><div class="flame"></div><div class="candle-body"></div></div>
+            </div>
+
+            <svg class="cake-svg" viewBox="0 0 230 195" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="tier1" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#f48fb1"/>
+                        <stop offset="100%" stop-color="#c2185b"/>
+                    </linearGradient>
+                    <linearGradient id="tier2" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#ef9a9a"/>
+                        <stop offset="100%" stop-color="#b71c1c"/>
+                    </linearGradient>
+                    <linearGradient id="tier3" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#ce93d8"/>
+                        <stop offset="100%" stop-color="#6a1b9a"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- === BOTTOM TIER === -->
+                <ellipse cx="115" cy="178" rx="98" ry="14" fill="rgba(0,0,0,0.2)"/>
+                <rect x="17" y="122" width="196" height="55" rx="10" fill="url(#tier1)"/>
+                <!-- frosting drip bottom -->
+                <path d="M19 124 Q26 136 33 124 Q43 138 53 124 Q63 138 73 124 Q83 138 93 124 Q103 138 113 124 Q123 138 133 124 Q143 138 153 124 Q163 138 173 124 Q183 136 193 124 Q200 134 211 124"
+                      fill="white" opacity="0.88"/>
+                <ellipse cx="115" cy="122" rx="98" ry="14" fill="#f8bbd0"/>
+                <!-- polka dots -->
+                <circle cx="50"  cy="150" r="7" fill="rgba(255,255,255,0.35)"/>
+                <circle cx="80"  cy="155" r="5" fill="rgba(255,215,0,0.5)"/>
+                <circle cx="115" cy="148" r="7" fill="rgba(255,255,255,0.35)"/>
+                <circle cx="150" cy="155" r="5" fill="rgba(255,215,0,0.5)"/>
+                <circle cx="180" cy="150" r="7" fill="rgba(255,255,255,0.35)"/>
+
+                <!-- === MIDDLE TIER === -->
+                <rect x="38" y="80" width="154" height="47" rx="9" fill="url(#tier2)"/>
+                <path d="M40 82 Q48 94 56 82 Q65 96 74 82 Q83 96 92 82 Q101 96 110 82 Q119 96 128 82 Q137 96 146 82 Q155 96 164 82 Q173 94 180 82 Q186 93 190 82"
+                      fill="white" opacity="0.88"/>
+                <ellipse cx="115" cy="80" rx="77" ry="12" fill="#ffcdd2"/>
+                <!-- hearts decoration -->
+                <text x="65"  y="110" font-size="16" fill="#ffd700" opacity="0.9">♥</text>
+                <text x="102" y="105" font-size="13" fill="white"   opacity="0.75">♥</text>
+                <text x="137" y="110" font-size="16" fill="#ffd700" opacity="0.9">♥</text>
+                <text x="170" y="106" font-size="12" fill="white"   opacity="0.6">♥</text>
+
+                <!-- === TOP TIER === -->
+                <rect x="65" y="44" width="100" height="40" rx="8" fill="url(#tier3)"/>
+                <path d="M67 46 Q74 57 81 46 Q89 59 97 46 Q105 59 113 46 Q121 59 129 46 Q137 59 145 46 Q152 57 160 46 Q164 56 163 46"
+                      fill="white" opacity="0.88"/>
+                <ellipse cx="115" cy="44" rx="50" ry="9" fill="#e1bee7"/>
+                <!-- star decorations -->
+                <text x="83"  y="70" font-size="15" fill="#ffd700" opacity="0.95">★</text>
+                <text x="110" y="66" font-size="12" fill="white"   opacity="0.7">★</text>
+                <text x="133" y="70" font-size="15" fill="#ffd700" opacity="0.95">★</text>
+            </svg>
+        </div>
+
+        <p class="subtitle">🌟 Que este día sea tan especial como tú 🌟<br>¡Te deseo lo mejor del mundo!</p>
+    </div>
+
+    <script>
+        /* ----- Stars ----- */
+        (function() {
+            const c = document.getElementById('stars');
+            for (let i = 0; i < 90; i++) {
+                const s = document.createElement('div');
+                s.className = 'star';
+                s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;
+                    width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;
+                    --duration:${Math.random()*3+1}s;
+                    animation-delay:${Math.random()*4}s`;
+                c.appendChild(s);
+            }
+        })();
+
+        /* ----- Open gift ----- */
+        function openGift() {
+            const gs = document.getElementById('gift-screen');
+            const bs = document.getElementById('birthday-screen');
+            gs.classList.add('hide');
+            setTimeout(function() {
+                bs.classList.add('show');
+                requestAnimationFrame(function() {
+                    requestAnimationFrame(function() {
+                        bs.classList.add('visible');
+                    });
+                });
+                celebrate();
+            }, 700);
+        }
+
+        /* ----- Celebration ----- */
+        function celebrate() {
+            dropConfetti(180);
+            setInterval(function() { dropConfetti(8); }, 600);
+            launchFirework(); launchFirework(); launchFirework();
+            setInterval(launchFirework, 900);
+            setInterval(spawnEmoji, 1400);
+        }
+
+        /* ----- Confetti ----- */
+        var COLORS = ['#ff6b9d','#ffd700','#c44dff','#4ade80','#60a5fa','#f97316','#ec4899','#34d399','#a78bfa'];
+
+        function dropConfetti(n) {
+            var cont = document.getElementById('confetti');
+            for (var i = 0; i < n; i++) {
+                (function(delay) {
+                    setTimeout(function() {
+                        var p = document.createElement('div');
+                        p.className = 'conf';
+                        var size = Math.random() * 11 + 6;
+                        p.style.cssText = 'left:' + Math.random()*100 + '%;'
+                            + 'background:' + COLORS[Math.floor(Math.random()*COLORS.length)] + ';'
+                            + 'width:' + size + 'px;height:' + size + 'px;'
+                            + 'border-radius:' + (Math.random() > 0.45 ? '50%' : '2px') + ';'
+                            + 'animation-duration:' + (Math.random()*3+3) + 's;'
+                            + 'animation-delay:' + Math.random()*0.5 + 's';
+                        cont.appendChild(p);
+                        setTimeout(function() { p.remove(); }, 7500);
+                    }, delay);
+                })(i * 28);
+            }
+        }
+
+        /* ----- Fireworks ----- */
+        function launchFirework() {
+            var cont = document.getElementById('fireworks');
+            var cx   = Math.random() * 80 + 10;
+            var cy   = Math.random() * 55 + 8;
+            var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            var count = Math.floor(Math.random() * 10) + 16;
+            var dur   = (Math.random() * 0.6 + 0.9).toFixed(2) + 's';
+
+            for (var i = 0; i < count; i++) {
+                var angle = (i / count) * Math.PI * 2;
+                var dist  = Math.random() * 90 + 45;
+                var tx    = (Math.cos(angle) * dist).toFixed(1);
+                var ty    = (Math.sin(angle) * dist).toFixed(1);
+                var size  = (Math.random() * 5 + 3).toFixed(1);
+
+                var p = document.createElement('div');
+                p.className = 'fw-particle';
+                p.style.cssText = 'left:' + cx + '%;top:' + cy + '%;'
+                    + 'width:' + size + 'px;height:' + size + 'px;'
+                    + 'background:' + color + ';'
+                    + 'box-shadow:0 0 6px ' + color + ';'
+                    + '--tx:' + tx + 'px;--ty:' + ty + 'px;'
+                    + 'animation-duration:' + dur;
+                cont.appendChild(p);
+                setTimeout(function(el) { el.remove(); }, 2000, p);
+            }
+        }
+
+        /* ----- Floating emoji ----- */
+        var EMOJIS = ['🎂','🎉','🌟','💫','✨','🎈','💖','🎊','🥳','🎁','🌈','⭐'];
+
+        function spawnEmoji() {
+            var e = document.createElement('div');
+            e.className = 'float-emoji';
+            e.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+            e.style.cssText = 'left:' + (Math.random()*88+1) + 'vw;'
+                + 'bottom:-60px;'
+                + 'animation-duration:' + (Math.random()*3+5) + 's';
+            document.body.appendChild(e);
+            setTimeout(function() { e.remove(); }, 9000);
+        }
+    </script>
+</body>
+</html>
